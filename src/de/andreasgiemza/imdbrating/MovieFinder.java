@@ -1,0 +1,41 @@
+package de.andreasgiemza.imdbrating;
+
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.LinkedList;
+
+/**
+ *
+ * @author hurik
+ */
+public class MovieFinder extends SimpleFileVisitor<Path> {
+
+    private final LinkedList<Movie> movies;
+
+    public MovieFinder(LinkedList<Movie> movies) {
+        this.movies = movies;
+    }
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes bfa) throws IOException {
+        if (file.getFileName().toString().endsWith(".nfo")) {
+            movies.add(MovieFactory.create(file));
+
+            return FileVisitResult.SKIP_SIBLINGS;
+        }
+
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes bfa) throws IOException {
+        if (dir.endsWith(".actors")) {
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+
+        return FileVisitResult.CONTINUE;
+    }
+}

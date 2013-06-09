@@ -142,7 +142,7 @@ public class Gui extends javax.swing.JFrame {
 
             try {
 
-                Files.walkFileTree(Paths.get("F:\\XBMC\\Filme"), movieFinder);
+                Files.walkFileTree(movieFolderFileChooser.getSelectedFile().toPath(), movieFinder);
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }

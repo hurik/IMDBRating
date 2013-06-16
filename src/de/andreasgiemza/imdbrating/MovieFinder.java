@@ -22,7 +22,15 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes bfa) throws IOException {
         if (file.getFileName().toString().endsWith(".nfo")) {
-            movies.add(MovieFactory.create(file));
+            Movie newMovie = MovieBuilder.create(file);
+
+            if (newMovie == null) {
+                newMovie = MovieBuilder.createAfterSavedAsUft8(file);
+            }
+            
+            if (newMovie != null) {
+                movies.add(newMovie);
+            }
 
             return FileVisitResult.SKIP_SIBLINGS;
         }

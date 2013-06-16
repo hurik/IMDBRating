@@ -2,6 +2,7 @@ package de.andreasgiemza.imdbrating;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -11,7 +12,7 @@ import org.jdom2.input.SAXBuilder;
  *
  * @author hurik
  */
-class MovieFactory {
+class MovieBuilder {
 
     static Movie create(Path file) {
         SAXBuilder builder = new SAXBuilder();
@@ -27,6 +28,16 @@ class MovieFactory {
                     rootNode.getChildText("rating").toString(),
                     rootNode.getChildText("votes").toString());
         } catch (IOException | JDOMException ex) {
+            return null;
+        }
+    }
+
+    static Movie createAfterSavedAsUft8(Path file) {
+        try {
+            String fileData = FileUtils.readFileToString(file.toFile(), "ISO8859_1");
+            FileUtils.write(file.toFile(), fileData, "UTF-8");
+            return create(file);
+        } catch (IOException ex) {
             return null;
         }
     }

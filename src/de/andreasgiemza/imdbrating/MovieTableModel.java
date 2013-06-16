@@ -1,6 +1,8 @@
 package de.andreasgiemza.imdbrating;
 
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -10,14 +12,14 @@ import javax.swing.table.AbstractTableModel;
 public class MovieTableModel extends AbstractTableModel {
 
     private final LinkedList<Movie> movies;
-    private final String[] columnNames = {
-        "IMDB ID",
-        "Local title",
-        "local rating",
-        "local votes",
-        "IMDB title",
-        "IMDB rating",
-        "IMDB votes"};
+    private final List<String> columnNames = Arrays.asList(
+            "IMDB ID",
+            "Local title",
+            "local rating",
+            "local votes",
+            "IMDB title",
+            "IMDB rating",
+            "IMDB votes");
 
     public MovieTableModel(LinkedList<Movie> movies) {
         this.movies = movies;
@@ -56,6 +58,6 @@ public class MovieTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int col) {
-        return columnNames[col];
+        return columnNames.get(col);
     }
 }

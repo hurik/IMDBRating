@@ -2,7 +2,6 @@ package de.andreasgiemza.imdbrating;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -141,7 +140,6 @@ public class Gui extends javax.swing.JFrame {
             MovieFinder movieFinder = new MovieFinder(movies);
 
             try {
-
                 Files.walkFileTree(movieFolderFileChooser.getSelectedFile().toPath(), movieFinder);
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);

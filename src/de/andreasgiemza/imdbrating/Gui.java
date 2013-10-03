@@ -1,7 +1,11 @@
 package de.andreasgiemza.imdbrating;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +18,7 @@ import javax.swing.JFileChooser;
 public class Gui extends javax.swing.JFrame {
 
     private final LinkedList<Movie> movies = new LinkedList<>();
+    private final Path optionsFile;
 
     /**
      * Creates new form Gui
@@ -22,6 +27,18 @@ public class Gui extends javax.swing.JFrame {
         initComponents();
 
         movieTable.setModel(new MovieTableModel(movies));
+
+        optionsFile = Paths.get(System.getProperty("user.home")).resolve(".IMDBRating");
+
+        try {
+            if (Files.exists(optionsFile)) {
+                movieFolderTextField.setText(Files.readAllLines(optionsFile, Charset.defaultCharset()).get(0));
+            } else {
+                Files.write(optionsFile, "".getBytes(), StandardOpenOption.CREATE);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -34,14 +51,15 @@ public class Gui extends javax.swing.JFrame {
     private void initComponents() {
 
         movieFolderFileChooser = new javax.swing.JFileChooser();
-        openMovieFolderButton = new javax.swing.JButton();
+        selectMovieFolderButton = new javax.swing.JButton();
         movieFolderTextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         movieTable = new javax.swing.JTable();
         getIMDBRatingButton = new javax.swing.JButton();
-        saveButton = new javax.swing.JButton();
+        saveRatingsButton = new javax.swing.JButton();
         progressBar = new javax.swing.JProgressBar();
         progressLabel = new javax.swing.JLabel();
+        scanForMoviesButton = new javax.swing.JButton();
 
         movieFolderFileChooser.setDialogTitle("Choose movie folder ...");
         movieFolderFileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
@@ -49,26 +67,16 @@ public class Gui extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IMDB Rating for XBMC");
 
-        openMovieFolderButton.setText("Open movie folder");
-        openMovieFolderButton.addActionListener(new java.awt.event.ActionListener() {
+        selectMovieFolderButton.setText("Select movie folder");
+        selectMovieFolderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openMovieFolderButtonActionPerformed(evt);
+                selectMovieFolderButtonActionPerformed(evt);
             }
         });
 
         movieFolderTextField.setEditable(false);
 
-        movieTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        movieTable.setAutoCreateRowSorter(true);
         jScrollPane1.setViewportView(movieTable);
 
         getIMDBRatingButton.setText("Get IMDB rating");
@@ -78,14 +86,21 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        saveButton.setText("Save");
-        saveButton.addActionListener(new java.awt.event.ActionListener() {
+        saveRatingsButton.setText("Save ratings");
+        saveRatingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
+                saveRatingsButtonActionPerformed(evt);
             }
         });
 
         progressLabel.setText("Progress");
+
+        scanForMoviesButton.setText("Scan for movies");
+        scanForMoviesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scanForMoviesButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,9 +112,11 @@ public class Gui extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(movieFolderTextField)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(selectMovieFolderButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(openMovieFolderButton))
-                    .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(scanForMoviesButton))
+                    .addComponent(saveRatingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(getIMDBRatingButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(progressLabel)
@@ -112,14 +129,15 @@ public class Gui extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(openMovieFolderButton)
-                    .addComponent(movieFolderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectMovieFolderButton)
+                    .addComponent(movieFolderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scanForMoviesButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(getIMDBRatingButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveButton)
+                .addComponent(saveRatingsButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(progressLabel, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -130,32 +148,30 @@ public class Gui extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void openMovieFolderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMovieFolderButtonActionPerformed
+    private void selectMovieFolderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectMovieFolderButtonActionPerformed
         int returnVal = movieFolderFileChooser.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             movies.clear();
             movieFolderTextField.setText(movieFolderFileChooser.getSelectedFile().toString());
 
-            MovieFinder movieFinder = new MovieFinder(movies);
-
             try {
-                Files.walkFileTree(movieFolderFileChooser.getSelectedFile().toPath(), movieFinder);
+                Files.deleteIfExists(optionsFile);
+                Files.write(optionsFile, movieFolderTextField.getText().getBytes(), StandardOpenOption.CREATE);
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            progressBar.setMaximum(movies.size());
-            movieTable.updateUI();
         }
-    }//GEN-LAST:event_openMovieFolderButtonActionPerformed
+    }//GEN-LAST:event_selectMovieFolderButtonActionPerformed
 
     private void getIMDBRatingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getIMDBRatingButtonActionPerformed
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 for (Movie movie : movies) {
-                    movie.getIMDBRating();
+                    if (!"null".equals(movie.getImdbID())) {
+                        movie.getIMDBRating();
+                    }
 
                     progressBar.setValue(movies.indexOf(movie) + 1);
                     movieTable.updateUI();
@@ -167,7 +183,7 @@ public class Gui extends javax.swing.JFrame {
         thread.start();
     }//GEN-LAST:event_getIMDBRatingButtonActionPerformed
 
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    private void saveRatingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveRatingsButtonActionPerformed
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -181,7 +197,24 @@ public class Gui extends javax.swing.JFrame {
 
         Thread thread = new Thread(runnable);
         thread.start();
-    }//GEN-LAST:event_saveButtonActionPerformed
+    }//GEN-LAST:event_saveRatingsButtonActionPerformed
+
+    private void scanForMoviesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanForMoviesButtonActionPerformed
+        Path movieFolder = Paths.get(movieFolderTextField.getText());
+
+        if (Files.exists(movieFolder)) {
+            MovieFinder movieFinder = new MovieFinder(movies);
+
+            try {
+                Files.walkFileTree(movieFolder, movieFinder);
+            } catch (IOException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            progressBar.setMaximum(movies.size());
+            movieTable.updateUI();
+        }
+    }//GEN-LAST:event_scanForMoviesButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -218,9 +251,10 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JFileChooser movieFolderFileChooser;
     private javax.swing.JTextField movieFolderTextField;
     private javax.swing.JTable movieTable;
-    private javax.swing.JButton openMovieFolderButton;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel progressLabel;
-    private javax.swing.JButton saveButton;
+    private javax.swing.JButton saveRatingsButton;
+    private javax.swing.JButton scanForMoviesButton;
+    private javax.swing.JButton selectMovieFolderButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -27,7 +27,7 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
             if (newMovie == null) {
                 newMovie = MovieBuilder.createAfterSavedAsUft8(file);
             }
-            
+
             if (newMovie != null) {
                 movies.add(newMovie);
             }

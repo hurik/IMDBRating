@@ -33,8 +33,6 @@ public class Gui extends javax.swing.JFrame {
         try {
             if (Files.exists(optionsFile)) {
                 movieFolderTextField.setText(Files.readAllLines(optionsFile, Charset.defaultCharset()).get(0));
-            } else {
-                Files.write(optionsFile, "".getBytes(), StandardOpenOption.CREATE);
             }
         } catch (IOException ex) {
             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,8 +71,6 @@ public class Gui extends javax.swing.JFrame {
                 selectMovieFolderButtonActionPerformed(evt);
             }
         });
-
-        movieFolderTextField.setEditable(false);
 
         movieTable.setAutoCreateRowSorter(true);
         jScrollPane1.setViewportView(movieTable);
@@ -154,13 +150,6 @@ public class Gui extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             movies.clear();
             movieFolderTextField.setText(movieFolderFileChooser.getSelectedFile().toString());
-
-            try {
-                Files.deleteIfExists(optionsFile);
-                Files.write(optionsFile, movieFolderTextField.getText().getBytes(), StandardOpenOption.CREATE);
-            } catch (IOException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }//GEN-LAST:event_selectMovieFolderButtonActionPerformed
 
@@ -201,6 +190,13 @@ public class Gui extends javax.swing.JFrame {
 
     private void scanForMoviesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanForMoviesButtonActionPerformed
         Path movieFolder = Paths.get(movieFolderTextField.getText());
+
+        try {
+            Files.deleteIfExists(optionsFile);
+            Files.write(optionsFile, movieFolder.toString().getBytes(), StandardOpenOption.CREATE);
+        } catch (IOException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         if (Files.exists(movieFolder)) {
             MovieFinder movieFinder = new MovieFinder(movies);

@@ -15,8 +15,8 @@ public class MovieTableModel extends AbstractTableModel {
     private final List<String> columnNames = Arrays.asList(
             "IMDB ID",
             "Local title",
-            "local rating",
-            "local votes",
+            "Local rating",
+            "Local votes",
             "IMDB title",
             "IMDB rating",
             "IMDB votes");

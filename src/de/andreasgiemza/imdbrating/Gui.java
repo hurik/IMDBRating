@@ -37,6 +37,8 @@ public class Gui extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        scanForMoviesButtonActionPerformed(null);
     }
 
     /**

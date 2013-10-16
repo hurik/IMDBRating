@@ -150,7 +150,6 @@ public class Gui extends javax.swing.JFrame {
         int returnVal = movieFolderFileChooser.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            movies.clear();
             movieFolderTextField.setText(movieFolderFileChooser.getSelectedFile().toString());
         }
     }//GEN-LAST:event_selectMovieFolderButtonActionPerformed
@@ -201,6 +200,8 @@ public class Gui extends javax.swing.JFrame {
         }
 
         if (Files.exists(movieFolder)) {
+            movies.clear();
+            
             MovieFinder movieFinder = new MovieFinder(movies);
 
             try {

@@ -2,7 +2,7 @@ package de.andreasgiemza.imdbrating;
 
 import com.omertron.imdbapi.ImdbApi;
 import com.omertron.imdbapi.model.ImdbMovieDetails;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -74,7 +74,7 @@ public class Movie {
 
         imdbName = imdb.getTitle();
         imdbRating = Float.toString(imdb.getRating());
-        imdbVotesCount = Double.toString(imdb.getNumVotes());
+        imdbVotesCount = Long.toString((long) imdb.getNumVotes());
     }
 
     public void updateIMDBRating() {
@@ -90,7 +90,7 @@ public class Movie {
             XMLOutputter xmlOutput = new XMLOutputter();
 
             xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(document, new FileWriter(nfo.toFile()));
+            xmlOutput.output(document, new FileOutputStream(nfo.toFile()));
         } catch (JDOMException ex) {
             Logger.getLogger(MovieFinder.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

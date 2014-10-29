@@ -23,10 +23,10 @@ class MovieBuilder {
 
             return new Movie(
                     file,
-                    rootNode.getChildText("id").toString(),
-                    rootNode.getChildText("title").toString(),
-                    rootNode.getChildText("rating").toString(),
-                    rootNode.getChildText("votes").toString());
+                    rootNode.getChildText("id"),
+                    rootNode.getChildText("title"),
+                    rootNode.getChildText("rating"),
+                    rootNode.getChildText("votes"));
         } catch (IOException | JDOMException ex) {
             return null;
         }

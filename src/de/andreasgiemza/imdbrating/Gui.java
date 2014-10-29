@@ -1,11 +1,9 @@
 package de.andreasgiemza.imdbrating;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +16,6 @@ import javax.swing.JFileChooser;
 public class Gui extends javax.swing.JFrame {
 
     private final LinkedList<Movie> movies = new LinkedList<>();
-    private final Path optionsFile;
 
     /**
      * Creates new form Gui
@@ -27,18 +24,6 @@ public class Gui extends javax.swing.JFrame {
         initComponents();
 
         movieTable.setModel(new MovieTableModel(movies));
-
-        optionsFile = Paths.get(System.getProperty("user.home")).resolve(".IMDBRating");
-
-        try {
-            if (Files.exists(optionsFile)) {
-                movieFolderTextField.setText(Files.readAllLines(optionsFile, Charset.defaultCharset()).get(0));
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        scanForMoviesButtonActionPerformed(null);
     }
 
     /**
@@ -192,16 +177,9 @@ public class Gui extends javax.swing.JFrame {
     private void scanForMoviesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanForMoviesButtonActionPerformed
         Path movieFolder = Paths.get(movieFolderTextField.getText());
 
-        try {
-            Files.deleteIfExists(optionsFile);
-            Files.write(optionsFile, movieFolder.toString().getBytes(), StandardOpenOption.CREATE);
-        } catch (IOException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         if (Files.exists(movieFolder)) {
             movies.clear();
-            
+
             MovieFinder movieFinder = new MovieFinder(movies);
 
             try {

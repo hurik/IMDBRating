@@ -17,9 +17,13 @@ public class MovieTableModel extends AbstractTableModel {
             "Local title",
             "Local rating",
             "Local votes",
+            "Local genres",
+            "Local countries",
             "IMDB title",
             "IMDB rating",
-            "IMDB votes");
+            "IMDB votes",
+            "IMDB genres",
+            "IMDB countries");
 
     public MovieTableModel(LinkedList<Movie> movies) {
         this.movies = movies;
@@ -32,7 +36,7 @@ public class MovieTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 7;
+        return columnNames.size();
     }
 
     @Override
@@ -46,11 +50,19 @@ public class MovieTableModel extends AbstractTableModel {
         } else if (i1 == 3) {
             return movies.get(i).getLocalVotesCount();
         } else if (i1 == 4) {
-            return movies.get(i).getImdbName();
+            return movies.get(i).getLocalGenres();
         } else if (i1 == 5) {
-            return movies.get(i).getImdbRating();
+            return movies.get(i).getLocalCountries();
         } else if (i1 == 6) {
+            return movies.get(i).getImdbName();
+        } else if (i1 == 7) {
+            return movies.get(i).getImdbRating();
+        } else if (i1 == 8) {
             return movies.get(i).getImdbVotesCount();
+        } else if (i1 == 9) {
+            return movies.get(i).getImdbGenre();
+        } else if (i1 == 10) {
+            return movies.get(i).getImdbCountries();
         } else {
             return null;
         }

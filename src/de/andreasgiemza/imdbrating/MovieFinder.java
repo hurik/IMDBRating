@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
+import javax.swing.JProgressBar;
+import javax.swing.JTable;
 
 /**
  *
@@ -14,9 +16,12 @@ import java.util.LinkedList;
 public class MovieFinder extends SimpleFileVisitor<Path> {
 
     private final LinkedList<Movie> movies;
+    private final Gui gui;
+    private int movieCount = 0;
 
-    public MovieFinder(LinkedList<Movie> movies) {
+    MovieFinder(LinkedList<Movie> movies, Gui gui) {
         this.movies = movies;
+        this.gui = gui;
     }
 
     @Override
@@ -24,12 +29,11 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
         if (file.getFileName().toString().endsWith(".nfo")) {
             Movie newMovie = MovieBuilder.create(file);
 
-            if (newMovie == null) {
-                newMovie = MovieBuilder.createAfterSavedAsUft8(file);
-            }
-
             if (newMovie != null) {
                 movies.add(newMovie);
+                movieCount++;
+
+                gui.updateMovieFinder(movieCount);
             }
 
             return FileVisitResult.SKIP_SIBLINGS;

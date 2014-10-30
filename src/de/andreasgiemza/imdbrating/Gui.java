@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
  */
 public class Gui extends javax.swing.JFrame {
 
+    private final Gui gui = this;
     private final LinkedList<Movie> movies = new LinkedList<>();
 
     /**
@@ -24,6 +25,7 @@ public class Gui extends javax.swing.JFrame {
         initComponents();
 
         movieTable.setModel(new MovieTableModel(movies));
+        progressBar.setStringPainted(true);
     }
 
     /**
@@ -75,6 +77,8 @@ public class Gui extends javax.swing.JFrame {
                 saveRatingsButtonActionPerformed(evt);
             }
         });
+
+        progressBar.setString("");
 
         progressLabel.setText("Progress");
 
@@ -140,9 +144,11 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_selectMovieFolderButtonActionPerformed
 
     private void getIMDBRatingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getIMDBRatingButtonActionPerformed
-        Runnable runnable = new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
+                progressBar.setString("");
+
                 for (Movie movie : movies) {
                     if (!"null".equals(movie.getImdbID())) {
                         movie.getIMDBRating();
@@ -152,46 +158,53 @@ public class Gui extends javax.swing.JFrame {
                     movieTable.updateUI();
                 }
             }
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
+        }).start();
     }//GEN-LAST:event_getIMDBRatingButtonActionPerformed
 
     private void saveRatingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveRatingsButtonActionPerformed
-        Runnable runnable = new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
+                progressBar.setString("");
+
                 for (Movie movie : movies) {
                     movie.updateIMDBRating();
 
                     progressBar.setValue(movies.indexOf(movie) + 1);
                 }
             }
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
+        }).start();
     }//GEN-LAST:event_saveRatingsButtonActionPerformed
 
     private void scanForMoviesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanForMoviesButtonActionPerformed
-        Path movieFolder = Paths.get(movieFolderTextField.getText());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Path movieFolder = Paths.get(movieFolderTextField.getText());
 
-        if (Files.exists(movieFolder)) {
-            movies.clear();
+                if (Files.exists(movieFolder)) {
+                    movies.clear();
 
-            MovieFinder movieFinder = new MovieFinder(movies);
+                    try {
+                        Files.walkFileTree(movieFolder, new MovieFinder(movies, gui));
+                    } catch (IOException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
-            try {
-                Files.walkFileTree(movieFolder, movieFinder);
-            } catch (IOException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    progressBar.setMaximum(movies.size());
+                }
             }
+        }).start();
 
-            progressBar.setMaximum(movies.size());
-            movieTable.updateUI();
+        if (movies.size() == 0) {
+            progressBar.setString("No movies found!");
         }
     }//GEN-LAST:event_scanForMoviesButtonActionPerformed
+
+    public void updateMovieFinder(int movieCount) {
+        progressBar.setString(movieCount + " movies found!");
+        movieTable.updateUI();
+    }
 
     /**
      * @param args the command line arguments

@@ -151,7 +151,7 @@ public class Gui extends javax.swing.JFrame {
 
                 for (Movie movie : movies) {
                     if (!"null".equals(movie.getImdbID())) {
-                        movie.getIMDBRating();
+                        OMDbAPI.getData(movie);
                     }
 
                     progressBar.setValue(movies.indexOf(movie) + 1);
@@ -168,7 +168,7 @@ public class Gui extends javax.swing.JFrame {
                 progressBar.setString("");
 
                 for (Movie movie : movies) {
-                    movie.updateIMDBRating();
+                    NFO.updateNfo(movie);
 
                     progressBar.setValue(movies.indexOf(movie) + 1);
                 }
@@ -193,12 +193,12 @@ public class Gui extends javax.swing.JFrame {
 
                     progressBar.setMaximum(movies.size());
                 }
+
+                if (movies.size() == 0) {
+                    progressBar.setString("No movies found!");
+                }
             }
         }).start();
-
-        if (movies.size() == 0) {
-            progressBar.setString("No movies found!");
-        }
     }//GEN-LAST:event_scanForMoviesButtonActionPerformed
 
     public void updateMovieFinder(int movieCount) {

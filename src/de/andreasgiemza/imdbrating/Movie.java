@@ -18,13 +18,15 @@ public class Movie {
     private final Long localVotesCount;
     private final List<String> localGenres = new LinkedList<>();
     private final List<String> localCountries = new LinkedList<>();
+    private final Integer localYear;
     private String imdbName;
     private Double imdbRating;
     private Long imdbVotesCount;
     private List<String> imdbGenre;
     private List<String> imdbCountries;
+    private Integer imdbYear;
 
-    Movie(Path nfo, String imdbID, String localName, String localRating, String localVotesCount, List<Element> localGenres, List<Element> localCountries) {
+    Movie(Path nfo, String imdbID, String localName, String localRating, String localVotesCount, List<Element> localGenres, List<Element> localCountries, String localYear) {
         this.nfo = nfo;
         this.imdbID = imdbID;
         this.localName = localName;
@@ -39,6 +41,11 @@ public class Movie {
             if (!country.getContent().isEmpty()) {
                 this.localCountries.add(country.getContent().get(0).getValue());
             }
+        }
+        if (!"".equals(localYear)) {
+            this.localYear = Integer.parseInt(localYear);
+        } else {
+            this.localYear = null;
         }
     }
 
@@ -68,6 +75,10 @@ public class Movie {
 
     public List<String> getLocalCountries() {
         return localCountries;
+    }
+
+    public Integer getLocalYear() {
+        return localYear;
     }
 
     public String getImdbName() {
@@ -108,5 +119,13 @@ public class Movie {
 
     public void setImdbCountries(List<String> imdbCountries) {
         this.imdbCountries = imdbCountries;
+    }
+
+    public Integer getImdbYear() {
+        return imdbYear;
+    }
+
+    public void setImdbYear(Integer imdbYear) {
+        this.imdbYear = imdbYear;
     }
 }

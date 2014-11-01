@@ -35,7 +35,8 @@ public final class NFO {
                     rootNode.getChildText("rating"),
                     rootNode.getChildText("votes"),
                     rootNode.getChildren("genre"),
-                    rootNode.getChildren("country"));
+                    rootNode.getChildren("country"),
+                    rootNode.getChildText("year"));
         } catch (IOException | JDOMException ex) {
             return null;
         }
@@ -52,16 +53,19 @@ public final class NFO {
             rootNode.getChild("votes").setText(Long.toString(movie.getImdbVotesCount()));
 
             rootNode.removeChildren("genre");
-            rootNode.removeChildren("country");
-
             for (String genre : movie.getImdbGenre()) {
                 Element child = new Element("genre").setText(genre);
                 rootNode.addContent(child);
             }
+
+            rootNode.removeChildren("country");
             for (String country : movie.getImdbCountries()) {
                 Element child = new Element("country").setText(country);
                 rootNode.addContent(child);
             }
+
+            rootNode.getChild("year").setText(Integer.toString(movie.getImdbYear()));
+
             XMLOutputter xmlOutput = new XMLOutputter();
 
             xmlOutput.setFormat(Format.getPrettyFormat());

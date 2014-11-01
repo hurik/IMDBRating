@@ -30,8 +30,9 @@ public final class OMDbAPI {
             movie.setImdbName(map.get("Title"));
             movie.setImdbRating(Double.parseDouble(map.get("imdbRating")));
             movie.setImdbVotesCount(Long.parseLong(map.get("imdbVotes").replace(",", "")));
-            movie.setImdbGenre(Arrays.asList(map.get("Genre").split(",")));
-            movie.setImdbCountries(Arrays.asList(map.get("Country").split(",")));
+            movie.setImdbGenre(Arrays.asList(map.get("Genre").split(", ")));
+            movie.setImdbCountries(Arrays.asList(map.get("Country").split(", ")));
+            movie.setImdbYear(Integer.parseInt(map.get("Year")));
         } catch (IOException ex) {
             Logger.getLogger(OMDbAPI.class.getName()).log(Level.SEVERE, null, ex);
         }

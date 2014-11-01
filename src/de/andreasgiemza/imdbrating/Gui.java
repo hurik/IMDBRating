@@ -1,10 +1,16 @@
 package de.andreasgiemza.imdbrating;
 
+import de.andreasgiemza.imdbrating.movietable.MovieTableModel;
+import de.andreasgiemza.imdbrating.movietable.MovieTableCellRenderer;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -17,6 +23,8 @@ public class Gui extends javax.swing.JFrame {
 
     private final Gui gui = this;
     private final LinkedList<Movie> movies = new LinkedList<>();
+    private final Properties properties = new Properties();
+    private final Path optionsFile = Paths.get(System.getProperty("user.home")).resolve(".IMDBRating");
 
     /**
      * Creates new form Gui
@@ -24,7 +32,19 @@ public class Gui extends javax.swing.JFrame {
     public Gui() {
         initComponents();
 
+        try {
+            properties.load(new FileInputStream(optionsFile.toFile()));
+        } catch (IOException ex) {
+        }
+
+        movieFolderTextField.setText(properties.getProperty("lastDir"));
+
         movieTable.setModel(new MovieTableModel(movies));
+        movieTable.setDefaultRenderer(String.class, new MovieTableCellRenderer());
+        movieTable.setDefaultRenderer(Double.class, new MovieTableCellRenderer());
+        movieTable.setDefaultRenderer(Long.class, new MovieTableCellRenderer());
+        movieTable.setDefaultRenderer(Integer.class, new MovieTableCellRenderer());
+        movieTable.setDefaultRenderer(List.class, new MovieTableCellRenderer());
         progressBar.setStringPainted(true);
     }
 
@@ -183,6 +203,13 @@ public class Gui extends javax.swing.JFrame {
                 Path movieFolder = Paths.get(movieFolderTextField.getText());
 
                 if (Files.exists(movieFolder)) {
+                    properties.setProperty("lastDir", movieFolder.toString());
+                    try {
+                        properties.store(new FileOutputStream(optionsFile.toFile()), null);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
                     movies.clear();
 
                     try {

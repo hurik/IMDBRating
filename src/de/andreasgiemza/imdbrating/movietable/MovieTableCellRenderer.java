@@ -19,14 +19,28 @@ public class MovieTableCellRenderer extends DefaultTableCellRenderer {
 
         Movie movie = ((MovieTableModel) table.getModel()).getMovieAt(table.convertRowIndexToModel(row));
 
-        c.setBackground(Color.WHITE);
+        if (isSelected) {
+            c.setBackground(Color.decode("0x3399FF"));
+        } else {
+            c.setBackground(Color.WHITE);
+        }
 
         if (movie.getImdbName() != null) {
-            if (!Objects.equals(movie.getLocalRating(), movie.getImdbRating())
-                    || !Objects.equals(movie.getLocalVotesCount(), movie.getImdbVotesCount())
-                    || !Objects.equals(movie.getLocalGenres(), movie.getImdbGenre())
-                    || !Objects.equals(movie.getLocalCountries(), movie.getImdbCountries())
-                    || !Objects.equals(movie.getLocalYear(), movie.getImdbYear())) {
+            if ((column == 2 || column == 8) && !Objects.equals(movie.getLocalRating(), movie.getImdbRating())) {
+                c.setBackground(Color.decode("0xFF4242"));
+            }
+
+            if ((column == 3 || column == 9) && !Objects.equals(movie.getLocalVotesCount(), movie.getImdbVotesCount())) {
+                c.setBackground(Color.decode("0xFF4242"));
+            }
+
+            if ((column == 4 || column == 10) && !Objects.equals(movie.getLocalGenres(), movie.getImdbGenre())) {
+                c.setBackground(Color.decode("0xFF4242"));
+            }
+            if ((column == 5 || column == 11) && !Objects.equals(movie.getLocalCountries(), movie.getImdbCountries())) {
+                c.setBackground(Color.decode("0xFF4242"));
+            }
+            if ((column == 6 || column == 12) && !Objects.equals(movie.getLocalYear(), movie.getImdbYear())) {
                 c.setBackground(Color.decode("0xFF4242"));
             }
         }

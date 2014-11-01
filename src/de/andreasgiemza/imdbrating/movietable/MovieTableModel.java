@@ -26,7 +26,8 @@ public class MovieTableModel extends AbstractTableModel {
             "IMDB votes",
             "IMDB genres",
             "IMDB countries",
-            "IMDB year");
+            "IMDB year",
+            "Changes");
 
     public MovieTableModel(LinkedList<Movie> movies) {
         this.movies = movies;
@@ -71,6 +72,8 @@ public class MovieTableModel extends AbstractTableModel {
                 return movies.get(row).getImdbCountries();
             case 12:
                 return movies.get(row).getImdbYear();
+            case 13:
+                return movies.get(row).getChanges();
             default:
                 return null;
         }
@@ -105,6 +108,8 @@ public class MovieTableModel extends AbstractTableModel {
                 return List.class;
             case 12:
                 return Integer.class;
+            case 13:
+                return Boolean.class;
             default:
                 return null;
         }

@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -16,10 +17,13 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
     private final LinkedList<Movie> movies;
     private final Gui gui;
     private int movieCount = 0;
+    private boolean nfoFound = false;
+    private final List<Path> noNfoPaths;
 
-    MovieFinder(LinkedList<Movie> movies, Gui gui) {
+    MovieFinder(LinkedList<Movie> movies, Gui gui, List<Path> noNfoPaths) {
         this.movies = movies;
         this.gui = gui;
+        this.noNfoPaths = noNfoPaths;
     }
 
     @Override
@@ -28,6 +32,7 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
             Movie newMovie = NFO.readNfo(file);
 
             if (newMovie != null) {
+                nfoFound = true;
                 movies.add(newMovie);
                 movieCount++;
 
@@ -42,10 +47,21 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes bfa) throws IOException {
+        nfoFound = false;
+
         if (dir.endsWith(".actors")) {
             return FileVisitResult.SKIP_SUBTREE;
         }
 
         return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        if (!nfoFound) {
+            noNfoPaths.add(dir);
+        }
+
+        return super.postVisitDirectory(dir, exc); //To change body of generated methods, choose Tools | Templates.
     }
 }

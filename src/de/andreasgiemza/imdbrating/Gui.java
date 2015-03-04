@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -188,10 +189,25 @@ public class Gui extends javax.swing.JFrame {
 
                     movies.clear();
 
+                    List<Path> noNfoPaths = new LinkedList<>();
+
                     try {
-                        Files.walkFileTree(movieFolder, new MovieFinder(movies, gui));
+                        Files.walkFileTree(movieFolder, new MovieFinder(movies, gui, noNfoPaths));
                     } catch (IOException ex) {
                         Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    if (!noNfoPaths.isEmpty()) {
+                        String folders = "";
+
+                        for (Path noNfoPath : noNfoPaths) {
+                            folders += noNfoPath + "\n";
+                        }
+
+                        JOptionPane.showMessageDialog(gui,
+                                "NFO file is missing in this folders:\n" + folders,
+                                "Error",
+                                JOptionPane.WARNING_MESSAGE);
                     }
 
                     progressBar.setMaximum(movies.size());

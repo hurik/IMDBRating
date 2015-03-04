@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 import org.jdom2.Element;
 
 /**
@@ -59,8 +60,6 @@ public class Movie {
         } else {
             this.localYear = null;
         }
-
-        getIMDBData();
     }
 
     public Path getNfo() {
@@ -123,8 +122,8 @@ public class Movie {
         return changes;
     }
 
-    private void getIMDBData() {
-        new Thread(new Runnable() {
+    public void getIMDBData(ExecutorService executor) {
+        Runnable imdbData = new Runnable() {
             @Override
             public void run() {
                 for (int i = 0; i < NUMBER_OF_TRIES; i++) {
@@ -158,6 +157,8 @@ public class Movie {
                     }
                 }
             }
-        }).start();
+        };
+
+        executor.execute(imdbData);
     }
 }

@@ -7,6 +7,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  *
@@ -19,11 +20,13 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
     private int movieCount = 0;
     private boolean nfoFound = false;
     private final List<Path> noNfoPaths;
+    private final ExecutorService executor;
 
-    MovieFinder(LinkedList<Movie> movies, Gui gui, List<Path> noNfoPaths) {
+    MovieFinder(LinkedList<Movie> movies, Gui gui, List<Path> noNfoPaths, ExecutorService executor) {
         this.movies = movies;
         this.gui = gui;
         this.noNfoPaths = noNfoPaths;
+        this.executor = executor;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
             Movie newMovie = NFO.readNfo(file);
 
             if (newMovie != null) {
+                newMovie.getIMDBData(executor);
                 nfoFound = true;
                 movies.add(newMovie);
                 movieCount++;

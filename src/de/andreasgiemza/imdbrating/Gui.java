@@ -11,6 +11,8 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -27,6 +29,7 @@ public class Gui extends javax.swing.JFrame {
     private final MovieTableModel movieTableModel = new MovieTableModel(movies);
     private final Properties properties = new Properties();
     private final Path optionsFile = Paths.get(System.getProperty("user.home")).resolve(".IMDBRating");
+    private final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     /**
      * Creates new form Gui
@@ -192,7 +195,7 @@ public class Gui extends javax.swing.JFrame {
                     List<Path> noNfoPaths = new LinkedList<>();
 
                     try {
-                        Files.walkFileTree(movieFolder, new MovieFinder(movies, gui, noNfoPaths));
+                        Files.walkFileTree(movieFolder, new MovieFinder(movies, gui, noNfoPaths, executor));
                     } catch (IOException ex) {
                         Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                     }

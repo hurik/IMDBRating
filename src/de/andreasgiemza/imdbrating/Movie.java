@@ -2,7 +2,6 @@ package de.andreasgiemza.imdbrating;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -13,8 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdom2.Element;
 
 /**
@@ -22,6 +19,8 @@ import org.jdom2.Element;
  * @author hurik
  */
 public class Movie {
+
+    private final static int NUMBER_OF_TRIES = 10;
 
     private final Path nfo;
     private final String imdbID;
@@ -128,25 +127,35 @@ public class Movie {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    InputStream input = new URL("http://www.omdbapi.com/?i=" + URLEncoder.encode(imdbID, "UTF-8")).openStream();
-                    Map<String, String> map = new Gson().fromJson(new InputStreamReader(input, "UTF-8"), new TypeToken<Map<String, String>>() {
-                    }.getType());
+                for (int i = 0; i < NUMBER_OF_TRIES; i++) {
+                    try {
+                        InputStream input = new URL("http://www.omdbapi.com/?i=" + URLEncoder.encode(imdbID, "UTF-8")).openStream();
+                        Map<String, String> map = new Gson().fromJson(new InputStreamReader(input, "UTF-8"), new TypeToken<Map<String, String>>() {
+                        }.getType());
 
-                    imdbName = map.get("Title");
-                    imdbRating = Double.parseDouble(map.get("imdbRating"));
-                    imdbVotesCount = Long.parseLong(map.get("imdbVotes").replace(",", ""));
-                    imdbGenre = Arrays.asList(map.get("Genre").split(", "));
-                    imdbCountries = Arrays.asList(map.get("Country").split(", "));
-                    imdbYear = Integer.parseInt(map.get("Year"));
+                        if ("False".equals(map.get("Response"))) {
+                            throw new Exception();
+                        }
 
-                    changes = !Objects.equals(localRating, imdbRating)
-                            || !Objects.equals(localVotesCount, imdbVotesCount)
-                            || !Objects.equals(localGenres, imdbGenre)
-                            || !Objects.equals(localCountries, imdbCountries)
-                            || !Objects.equals(localYear, imdbYear);
-                } catch (IOException ex) {
-                    Logger.getLogger(Movie.class.getName()).log(Level.SEVERE, null, ex);
+                        imdbName = map.get("Title");
+                        imdbRating = Double.parseDouble(map.get("imdbRating"));
+                        imdbVotesCount = Long.parseLong(map.get("imdbVotes").replace(",", ""));
+                        imdbGenre = Arrays.asList(map.get("Genre").split(", "));
+                        imdbCountries = Arrays.asList(map.get("Country").split(", "));
+                        imdbYear = Integer.parseInt(map.get("Year"));
+
+                        changes = !Objects.equals(localRating, imdbRating)
+                                || !Objects.equals(localVotesCount, imdbVotesCount)
+                                || !Objects.equals(localGenres, imdbGenre)
+                                || !Objects.equals(localCountries, imdbCountries)
+                                || !Objects.equals(localYear, imdbYear);
+
+                        break;
+                    } catch (Exception ex) {
+                        if (i + 1 == NUMBER_OF_TRIES) {
+                            System.out.println(localName + ": Error while getting IMDB data!");
+                        }
+                    }
                 }
             }
         }).start();

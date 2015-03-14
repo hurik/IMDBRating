@@ -1,4 +1,4 @@
-package de.andreasgiemza.imdbrating;
+package de.andreasgiemza.kodinfoupdater;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;

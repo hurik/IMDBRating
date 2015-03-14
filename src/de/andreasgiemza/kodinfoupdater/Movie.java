@@ -1,4 +1,4 @@
-package de.andreasgiemza.imdbrating;
+package de.andreasgiemza.kodinfoupdater;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

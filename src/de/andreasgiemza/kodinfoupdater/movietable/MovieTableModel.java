@@ -1,6 +1,6 @@
-package de.andreasgiemza.imdbrating.movietable;
+package de.andreasgiemza.kodinfoupdater.movietable;
 
-import de.andreasgiemza.imdbrating.Movie;
+import de.andreasgiemza.kodinfoupdater.Movie;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

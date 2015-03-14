@@ -1,7 +1,7 @@
-package de.andreasgiemza.imdbrating;
+package de.andreasgiemza.kodinfoupdater;
 
-import de.andreasgiemza.imdbrating.movietable.MovieTableModel;
-import de.andreasgiemza.imdbrating.movietable.MovieTableCellRenderer;
+import de.andreasgiemza.kodinfoupdater.movietable.MovieTableModel;
+import de.andreasgiemza.kodinfoupdater.movietable.MovieTableCellRenderer;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -78,7 +78,7 @@ public class Gui extends javax.swing.JFrame {
         movieFolderFileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("IMDB Rating for XBMC");
+        setTitle("KODInfoUPDATER");
 
         selectMovieFolderButton.setText("Select movie folder");
         selectMovieFolderButton.addActionListener(new java.awt.event.ActionListener() {

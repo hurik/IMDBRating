@@ -1,6 +1,5 @@
 package de.andreasgiemza.kodinfoupdater.movietable;
 
-import de.andreasgiemza.kodinfoupdater.movietable.MovieTableModel;
 import de.andreasgiemza.kodinfoupdater.Movie;
 import java.awt.Color;
 import java.awt.Component;

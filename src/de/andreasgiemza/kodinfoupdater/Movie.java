@@ -128,7 +128,7 @@ public class Movie {
             public void run() {
                 for (int i = 0; i < NUMBER_OF_TRIES; i++) {
                     try {
-                        InputStream input = new URL("http://www.omdbapi.com/?i=" + URLEncoder.encode(imdbID, "UTF-8")).openStream();
+                        InputStream input = new URL("http://www.omdbapi.com/?i=" + URLEncoder.encode(imdbID, "UTF-8") + "&plot=short&r=json").openStream();
                         Map<String, String> map = new Gson().fromJson(new InputStreamReader(input, "UTF-8"), new TypeToken<Map<String, String>>() {
                         }.getType());
 

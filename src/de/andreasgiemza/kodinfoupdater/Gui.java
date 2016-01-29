@@ -29,7 +29,7 @@ public class Gui extends javax.swing.JFrame {
     private final MovieTableModel movieTableModel = new MovieTableModel(movies);
     private final Properties properties = new Properties();
     private final Path optionsFile = Paths.get(System.getProperty("user.home")).resolve(".IMDBRating");
-    private final ExecutorService executor = Executors.newFixedThreadPool(10);
+    private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
     /**
      * Creates new form Gui
@@ -216,7 +216,7 @@ public class Gui extends javax.swing.JFrame {
                     progressBar.setMaximum(movies.size());
                 }
 
-                if (movies.size() == 0) {
+                if (movies.isEmpty()) {
                     progressBar.setString("No movies found!");
                 }
             }
@@ -234,7 +234,7 @@ public class Gui extends javax.swing.JFrame {
     public static void main(String args[]) {
         /* Set the Windows look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        /* If Windows is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {

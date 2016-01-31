@@ -44,13 +44,13 @@ public class Gui extends javax.swing.JFrame {
 
         movieFolderTextField.setText(properties.getProperty("lastDir"));
 
-        movieTable.setModel(movieTableModel);
+        moviesTable.setModel(movieTableModel);
 
-        movieTable.setDefaultRenderer(String.class, new MovieTableCellRenderer());
-        movieTable.setDefaultRenderer(Double.class, new MovieTableCellRenderer());
-        movieTable.setDefaultRenderer(Long.class, new MovieTableCellRenderer());
-        movieTable.setDefaultRenderer(Integer.class, new MovieTableCellRenderer());
-        movieTable.setDefaultRenderer(List.class, new MovieTableCellRenderer());
+        moviesTable.setDefaultRenderer(String.class, new MovieTableCellRenderer());
+        moviesTable.setDefaultRenderer(Double.class, new MovieTableCellRenderer());
+        moviesTable.setDefaultRenderer(Long.class, new MovieTableCellRenderer());
+        moviesTable.setDefaultRenderer(Integer.class, new MovieTableCellRenderer());
+        moviesTable.setDefaultRenderer(List.class, new MovieTableCellRenderer());
 
         progressBar.setStringPainted(true);
     }
@@ -64,18 +64,19 @@ public class Gui extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        movieFolderFileChooser = new javax.swing.JFileChooser();
-        selectMovieFolderButton = new javax.swing.JButton();
+        moviesFolderFileChooser = new javax.swing.JFileChooser();
         movieFolderTextField = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        movieTable = new javax.swing.JTable();
-        saveRatingsButton = new javax.swing.JButton();
-        progressBar = new javax.swing.JProgressBar();
-        progressLabel = new javax.swing.JLabel();
+        selectMovieFolderButton = new javax.swing.JButton();
         scanForMoviesButton = new javax.swing.JButton();
+        moviesScrollPane = new javax.swing.JScrollPane();
+        moviesTable = new javax.swing.JTable();
+        saveRatingsButton = new javax.swing.JButton();
+        ignoreOldValuesCheckBox = new javax.swing.JCheckBox();
+        progressLabel = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
 
-        movieFolderFileChooser.setDialogTitle("Choose movie folder ...");
-        movieFolderFileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        moviesFolderFileChooser.setDialogTitle("Choose movie folder ...");
+        moviesFolderFileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("KODInfoUPDATER");
@@ -87,8 +88,15 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        movieTable.setAutoCreateRowSorter(true);
-        jScrollPane1.setViewportView(movieTable);
+        scanForMoviesButton.setText("Scan for movies");
+        scanForMoviesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scanForMoviesButtonActionPerformed(evt);
+            }
+        });
+
+        moviesTable.setAutoCreateRowSorter(true);
+        moviesScrollPane.setViewportView(moviesTable);
 
         saveRatingsButton.setText("Save ratings");
         saveRatingsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -97,16 +105,12 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        progressBar.setString("");
+        ignoreOldValuesCheckBox.setSelected(true);
+        ignoreOldValuesCheckBox.setText("Ignore older values");
 
         progressLabel.setText("Progress");
 
-        scanForMoviesButton.setText("Scan for movies");
-        scanForMoviesButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                scanForMoviesButtonActionPerformed(evt);
-            }
-        });
+        progressBar.setString("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,18 +119,21 @@ public class Gui extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
+                    .addComponent(moviesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(movieFolderTextField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(selectMovieFolderButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(scanForMoviesButton))
-                    .addComponent(saveRatingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(progressLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(saveRatingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ignoreOldValuesCheckBox)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -138,9 +145,11 @@ public class Gui extends javax.swing.JFrame {
                     .addComponent(movieFolderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(scanForMoviesButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addComponent(moviesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveRatingsButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(saveRatingsButton)
+                    .addComponent(ignoreOldValuesCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(progressLabel, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -152,10 +161,10 @@ public class Gui extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void selectMovieFolderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectMovieFolderButtonActionPerformed
-        int returnVal = movieFolderFileChooser.showOpenDialog(this);
+        int returnVal = moviesFolderFileChooser.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            movieFolderTextField.setText(movieFolderFileChooser.getSelectedFile().toString());
+            movieFolderTextField.setText(moviesFolderFileChooser.getSelectedFile().toString());
         }
     }//GEN-LAST:event_selectMovieFolderButtonActionPerformed
 
@@ -263,10 +272,11 @@ public class Gui extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JFileChooser movieFolderFileChooser;
+    private javax.swing.JCheckBox ignoreOldValuesCheckBox;
     private javax.swing.JTextField movieFolderTextField;
-    private javax.swing.JTable movieTable;
+    private javax.swing.JFileChooser moviesFolderFileChooser;
+    private javax.swing.JScrollPane moviesScrollPane;
+    private javax.swing.JTable moviesTable;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel progressLabel;
     private javax.swing.JButton saveRatingsButton;

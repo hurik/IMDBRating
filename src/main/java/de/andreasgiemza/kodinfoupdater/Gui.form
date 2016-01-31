@@ -2,7 +2,7 @@
 
 <Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.JFileChooser" name="movieFolderFileChooser">
+    <Component class="javax.swing.JFileChooser" name="moviesFolderFileChooser">
       <Properties>
         <Property name="dialogTitle" type="java.lang.String" value="Choose movie folder ..."/>
         <Property name="fileSelectionMode" type="int" value="1"/>
@@ -35,7 +35,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" pref="780" max="32767" attributes="0"/>
+                  <Component id="moviesScrollPane" pref="780" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="movieFolderTextField" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -43,11 +43,15 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="scanForMoviesButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="saveRatingsButton" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="progressLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="progressBar" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="saveRatingsButton" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="ignoreOldValuesCheckBox" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -64,9 +68,12 @@
                   <Component id="scanForMoviesButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="500" max="32767" attributes="0"/>
+              <Component id="moviesScrollPane" pref="500" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="saveRatingsButton" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="saveRatingsButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ignoreOldValuesCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="progressLabel" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -78,6 +85,8 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
+    <Component class="javax.swing.JTextField" name="movieFolderTextField">
+    </Component>
     <Component class="javax.swing.JButton" name="selectMovieFolderButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Select movie folder"/>
@@ -86,16 +95,22 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectMovieFolderButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="movieFolderTextField">
+    <Component class="javax.swing.JButton" name="scanForMoviesButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Scan for movies"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="scanForMoviesButtonActionPerformed"/>
+      </Events>
     </Component>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+    <Container class="javax.swing.JScrollPane" name="moviesScrollPane">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="movieTable">
+        <Component class="javax.swing.JTable" name="moviesTable">
           <Properties>
             <Property name="autoCreateRowSorter" type="boolean" value="true"/>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -113,9 +128,10 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveRatingsButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JProgressBar" name="progressBar">
+    <Component class="javax.swing.JCheckBox" name="ignoreOldValuesCheckBox">
       <Properties>
-        <Property name="string" type="java.lang.String" value=""/>
+        <Property name="selected" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" value="Ignore older values"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="progressLabel">
@@ -123,13 +139,10 @@
         <Property name="text" type="java.lang.String" value="Progress"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="scanForMoviesButton">
+    <Component class="javax.swing.JProgressBar" name="progressBar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Scan for movies"/>
+        <Property name="string" type="java.lang.String" value=""/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="scanForMoviesButtonActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

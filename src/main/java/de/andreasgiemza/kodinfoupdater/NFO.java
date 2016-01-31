@@ -42,15 +42,17 @@ public final class NFO {
         }
     }
 
-    public static void updateNfo(Movie movie) {
+    public static void updateNfo(Movie movie, boolean ignoreOlderRatings) {
         SAXBuilder builder = new SAXBuilder();
 
         try {
             Document document = (Document) builder.build(movie.getNfo().toFile());
             Element rootNode = document.getRootElement();
 
-            rootNode.getChild("rating").setText(Double.toString(movie.getImdbRating()));
-            rootNode.getChild("votes").setText(Long.toString(movie.getImdbVotesCount()));
+            if (!ignoreOlderRatings || movie.getLocalVotesCount() < movie.getImdbVotesCount()) {
+                rootNode.getChild("rating").setText(Double.toString(movie.getImdbRating()));
+                rootNode.getChild("votes").setText(Long.toString(movie.getImdbVotesCount()));
+            }
 
             rootNode.removeChildren("genre");
             for (String genre : movie.getImdbGenre()) {

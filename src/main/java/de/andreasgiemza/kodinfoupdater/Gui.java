@@ -71,7 +71,7 @@ public class Gui extends javax.swing.JFrame {
         moviesScrollPane = new javax.swing.JScrollPane();
         moviesTable = new javax.swing.JTable();
         saveRatingsButton = new javax.swing.JButton();
-        ignoreOldValuesCheckBox = new javax.swing.JCheckBox();
+        ignoreOldRatingsCheckBox = new javax.swing.JCheckBox();
         progressLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
 
@@ -105,8 +105,8 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        ignoreOldValuesCheckBox.setSelected(true);
-        ignoreOldValuesCheckBox.setText("Ignore older values");
+        ignoreOldRatingsCheckBox.setSelected(true);
+        ignoreOldRatingsCheckBox.setText("Ignore older ratings");
 
         progressLabel.setText("Progress");
 
@@ -133,7 +133,7 @@ public class Gui extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(saveRatingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ignoreOldValuesCheckBox)))
+                        .addComponent(ignoreOldRatingsCheckBox)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -149,7 +149,7 @@ public class Gui extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveRatingsButton)
-                    .addComponent(ignoreOldValuesCheckBox))
+                    .addComponent(ignoreOldRatingsCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(progressLabel, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -176,7 +176,7 @@ public class Gui extends javax.swing.JFrame {
 
                 for (Movie movie : movies) {
                     if (movie.getChanges()) {
-                        NFO.updateNfo(movie);
+                        NFO.updateNfo(movie, ignoreOldRatingsCheckBox.isSelected());
                     }
 
                     progressBar.setValue(movies.indexOf(movie) + 1);
@@ -272,7 +272,7 @@ public class Gui extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox ignoreOldValuesCheckBox;
+    private javax.swing.JCheckBox ignoreOldRatingsCheckBox;
     private javax.swing.JTextField movieFolderTextField;
     private javax.swing.JFileChooser moviesFolderFileChooser;
     private javax.swing.JScrollPane moviesScrollPane;

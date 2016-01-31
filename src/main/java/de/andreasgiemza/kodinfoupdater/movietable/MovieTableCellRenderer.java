@@ -26,22 +26,30 @@ public class MovieTableCellRenderer extends DefaultTableCellRenderer {
         }
 
         if (movie.getImdbName() != null) {
-            if ((column == 2 || column == 8) && !Objects.equals(movie.getLocalRating(), movie.getImdbRating())) {
-                c.setBackground(Color.decode("0xFF4242"));
+            if ((column == 2 || column == 8) && movie.getLocalVotesCount() != null && movie.getImdbVotesCount() != null) {
+                if (movie.getLocalVotesCount() < movie.getImdbVotesCount()) {
+                    c.setBackground(Color.GREEN);
+                } else if (movie.getLocalVotesCount() > movie.getImdbVotesCount()) {
+                    c.setBackground(Color.RED);
+                }
             }
 
-            if ((column == 3 || column == 9) && !Objects.equals(movie.getLocalVotesCount(), movie.getImdbVotesCount())) {
-                c.setBackground(Color.decode("0xFF4242"));
+            if ((column == 3 || column == 9) && movie.getLocalVotesCount() != null && movie.getImdbVotesCount() != null) {
+                if (movie.getLocalVotesCount() < movie.getImdbVotesCount()) {
+                    c.setBackground(Color.GREEN);
+                } else if (movie.getLocalVotesCount() > movie.getImdbVotesCount()) {
+                    c.setBackground(Color.RED);
+                }
             }
 
             if ((column == 4 || column == 10) && !Objects.equals(movie.getLocalGenres(), movie.getImdbGenre())) {
-                c.setBackground(Color.decode("0xFF4242"));
+                c.setBackground(Color.GREEN);
             }
             if ((column == 5 || column == 11) && !Objects.equals(movie.getLocalCountries(), movie.getImdbCountries())) {
-                c.setBackground(Color.decode("0xFF4242"));
+                c.setBackground(Color.GREEN);
             }
             if ((column == 6 || column == 12) && !Objects.equals(movie.getLocalYear(), movie.getImdbYear())) {
-                c.setBackground(Color.decode("0xFF4242"));
+                c.setBackground(Color.GREEN);
             }
         }
 

@@ -28,7 +28,7 @@ public class Gui extends javax.swing.JFrame {
     private final LinkedList<Movie> movies = new LinkedList<>();
     private final MovieTableModel movieTableModel = new MovieTableModel(movies);
     private final Properties properties = new Properties();
-    private final Path optionsFile = Paths.get(System.getProperty("user.home")).resolve(".IMDBRating");
+    private final Path optionsFile = Paths.get(System.getProperty("user.home")).resolve(".KODInfoUPDATER");
     private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
     /**

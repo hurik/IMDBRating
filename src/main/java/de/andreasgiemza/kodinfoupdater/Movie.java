@@ -122,7 +122,7 @@ public class Movie {
         return changes;
     }
 
-    public void getIMDBData(ExecutorService executor) {
+    public void getIMDBData(ExecutorService executor, final Gui gui) {
         Runnable imdbData = new Runnable() {
             @Override
             public void run() {
@@ -148,6 +148,8 @@ public class Movie {
                                 || !Objects.equals(localGenres, imdbGenre)
                                 || !Objects.equals(localCountries, imdbCountries)
                                 || !Objects.equals(localYear, imdbYear);
+
+                        gui.updateMovieTable();
 
                         break;
                     } catch (Exception ex) {

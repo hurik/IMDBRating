@@ -223,6 +223,10 @@ public class Gui extends javax.swing.JFrame {
         }).start();
     }//GEN-LAST:event_scanForMoviesButtonActionPerformed
 
+    public void updateMovieTable() {
+        movieTableModel.fireTableDataChanged();
+    }
+
     public void updateMovieFinder(int movieCount) {
         progressBar.setString(movieCount + " movies found!");
         movieTableModel.fireTableDataChanged();

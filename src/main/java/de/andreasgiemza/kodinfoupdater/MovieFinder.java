@@ -35,7 +35,7 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
             Movie newMovie = NFO.readNfo(file);
 
             if (newMovie != null) {
-                newMovie.getIMDBData(executor);
+                newMovie.getIMDBData(executor, gui);
                 nfoFound = true;
                 movies.add(newMovie);
                 movieCount++;

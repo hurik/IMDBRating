@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
  * @author hurik
  */
 public class Gui extends javax.swing.JFrame {
-
+    
     private final Gui gui = this;
     private final LinkedList<Movie> movies = new LinkedList<>();
     private final MovieTableModel movieTableModel = new MovieTableModel(movies);
@@ -36,22 +36,22 @@ public class Gui extends javax.swing.JFrame {
      */
     public Gui() {
         initComponents();
-
+        
         try {
             properties.load(new FileInputStream(optionsFile.toFile()));
         } catch (IOException ex) {
         }
-
+        
         movieFolderTextField.setText(properties.getProperty("lastDir"));
-
+        
         moviesTable.setModel(movieTableModel);
-
+        
         moviesTable.setDefaultRenderer(String.class, new MovieTableCellRenderer());
         moviesTable.setDefaultRenderer(Double.class, new MovieTableCellRenderer());
         moviesTable.setDefaultRenderer(Long.class, new MovieTableCellRenderer());
         moviesTable.setDefaultRenderer(Integer.class, new MovieTableCellRenderer());
         moviesTable.setDefaultRenderer(List.class, new MovieTableCellRenderer());
-
+        
         progressBar.setStringPainted(true);
     }
 
@@ -162,7 +162,7 @@ public class Gui extends javax.swing.JFrame {
 
     private void selectMovieFolderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectMovieFolderButtonActionPerformed
         int returnVal = moviesFolderFileChooser.showOpenDialog(this);
-
+        
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             movieFolderTextField.setText(moviesFolderFileChooser.getSelectedFile().toString());
         }
@@ -173,14 +173,16 @@ public class Gui extends javax.swing.JFrame {
             @Override
             public void run() {
                 progressBar.setString("");
-
+                
                 for (Movie movie : movies) {
                     if (movie.getChanges()) {
                         NFO.updateNfo(movie, ignoreOldRatingsCheckBox.isSelected());
                     }
-
+                    
                     progressBar.setValue(movies.indexOf(movie) + 1);
                 }
+                
+                scanForMoviesButtonActionPerformed(null);
             }
         }).start();
     }//GEN-LAST:event_saveRatingsButtonActionPerformed
@@ -190,7 +192,7 @@ public class Gui extends javax.swing.JFrame {
             @Override
             public void run() {
                 Path movieFolder = Paths.get(movieFolderTextField.getText());
-
+                
                 if (Files.exists(movieFolder)) {
                     properties.setProperty("lastDir", movieFolder.toString());
                     try {
@@ -198,44 +200,44 @@ public class Gui extends javax.swing.JFrame {
                     } catch (IOException ex) {
                         Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
+                    
                     movies.clear();
-
+                    
                     List<Path> noNfoPaths = new LinkedList<>();
-
+                    
                     try {
                         Files.walkFileTree(movieFolder, new MovieFinder(movies, gui, noNfoPaths, executor));
                     } catch (IOException ex) {
                         Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
+                    
                     if (!noNfoPaths.isEmpty()) {
                         String folders = "";
-
+                        
                         for (Path noNfoPath : noNfoPaths) {
                             folders += noNfoPath + "\n";
                         }
-
+                        
                         JOptionPane.showMessageDialog(gui,
                                 "NFO file is missing in this folders:\n" + folders,
                                 "Error",
                                 JOptionPane.WARNING_MESSAGE);
                     }
-
+                    
                     progressBar.setMaximum(movies.size());
                 }
-
+                
                 if (movies.isEmpty()) {
                     progressBar.setString("No movies found!");
                 }
             }
         }).start();
     }//GEN-LAST:event_scanForMoviesButtonActionPerformed
-
+    
     public void updateMovieTable() {
         movieTableModel.fireTableDataChanged();
     }
-
+    
     public void updateMovieFinder(int movieCount) {
         progressBar.setString(movieCount + " movies found!");
         movieTableModel.fireTableDataChanged();

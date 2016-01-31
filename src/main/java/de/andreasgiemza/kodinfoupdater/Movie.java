@@ -141,7 +141,7 @@ public class Movie {
                         imdbVotesCount = Long.parseLong(map.get("imdbVotes").replace(",", ""));
                         imdbGenre = Arrays.asList(map.get("Genre").split(", "));
                         imdbCountries = Arrays.asList(map.get("Country").split(", "));
-                        imdbYear = Integer.parseInt(map.get("Year"));
+                        imdbYear = Integer.parseInt(map.get("Year").replaceAll("[^\\d.]", ""));
 
                         changes = !Objects.equals(localRating, imdbRating)
                                 || !Objects.equals(localVotesCount, imdbVotesCount)

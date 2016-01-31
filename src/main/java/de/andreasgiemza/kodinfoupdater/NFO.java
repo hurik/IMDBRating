@@ -49,7 +49,7 @@ public final class NFO {
             Document document = (Document) builder.build(movie.getNfo().toFile());
             Element rootNode = document.getRootElement();
 
-            if (!ignoreOlderRatings || movie.getLocalVotesCount() < movie.getImdbVotesCount()) {
+            if (!ignoreOlderRatings || movie.getLocalVotesCount() <= movie.getImdbVotesCount()) {
                 rootNode.getChild("rating").setText(Double.toString(movie.getImdbRating()));
                 rootNode.getChild("votes").setText(Long.toString(movie.getImdbVotesCount()));
             }

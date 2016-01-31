@@ -53,7 +53,7 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes bfa) throws IOException {
         nfoFound = false;
 
-        if (dir.endsWith(".actors")) {
+        if (dir.getFileName().toString().startsWith(".")) {
             return FileVisitResult.SKIP_SUBTREE;
         }
 
@@ -66,6 +66,6 @@ public class MovieFinder extends SimpleFileVisitor<Path> {
             noNfoPaths.add(dir);
         }
 
-        return super.postVisitDirectory(dir, exc); //To change body of generated methods, choose Tools | Templates.
+        return super.postVisitDirectory(dir, exc);
     }
 }

@@ -1,19 +1,15 @@
 package de.andreasgiemza.kodinfoupdater;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLEncoder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import org.jdom2.Element;
+import org.jsoup.Jsoup;
 
 /**
  *
@@ -128,20 +124,19 @@ public class Movie {
             public void run() {
                 for (int i = 0; i < NUMBER_OF_TRIES; i++) {
                     try {
-                        InputStream input = new URL("http://www.omdbapi.com/?i=" + URLEncoder.encode(imdbID, "UTF-8") + "&plot=short&r=json").openStream();
-                        Map<String, String> map = new Gson().fromJson(new InputStreamReader(input, "UTF-8"), new TypeToken<Map<String, String>>() {
-                        }.getType());
+                        String json = Jsoup.connect("http://www.omdbapi.com/?i=" + imdbID).ignoreContentType(true).execute().body();
+                        JsonObject rootObj = new JsonParser().parse(json).getAsJsonObject();
 
-                        if ("False".equals(map.get("Response"))) {
+                        if ("False".equals(rootObj.getAsJsonPrimitive("Response").getAsString())) {
                             throw new Exception();
                         }
 
-                        imdbName = map.get("Title");
-                        imdbRating = Double.parseDouble(map.get("imdbRating"));
-                        imdbVotesCount = Long.parseLong(map.get("imdbVotes").replace(",", ""));
-                        imdbGenre = Arrays.asList(map.get("Genre").split(", "));
-                        imdbCountries = Arrays.asList(map.get("Country").split(", "));
-                        imdbYear = Integer.parseInt(map.get("Year").replaceAll("[^\\d.]", ""));
+                        imdbName = rootObj.getAsJsonPrimitive("Title").getAsString();
+                        imdbRating = rootObj.getAsJsonPrimitive("imdbRating").getAsDouble();
+                        imdbVotesCount = Long.parseLong(rootObj.getAsJsonPrimitive("imdbVotes").getAsString().replace(",", ""));
+                        imdbGenre = Arrays.asList(rootObj.getAsJsonPrimitive("Genre").getAsString().split(", "));
+                        imdbCountries = Arrays.asList(rootObj.getAsJsonPrimitive("Country").getAsString().split(", "));
+                        imdbYear = Integer.parseInt(rootObj.getAsJsonPrimitive("Year").getAsString().replaceAll("[^\\d.]", ""));
 
                         changes = !Objects.equals(localRating, imdbRating)
                                 || !Objects.equals(localVotesCount, imdbVotesCount)
